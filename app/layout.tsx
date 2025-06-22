@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Fleumin",
   description: "Admin Fleura App",
   icons: {
-    icon: 'images/favicon.ico',
+    icon: "images/favicon.ico",
   },
 };
 
@@ -23,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} font-sans`}>{children}</body>
+    <html lang="en" className={poppins.variable}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }
