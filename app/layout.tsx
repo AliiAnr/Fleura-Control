@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import NavbarWrapper from "@/components/NavbarWrapper";
+import MainWrapper from "@/components/MainWrapper";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export default function RootLayout({
         <Toaster position="top-center" />
         <div className="flex min-h-screen">
           <NavbarWrapper />
-          <main className="flex-1 p-8">{children}</main>
+          <MainWrapper>{children}</MainWrapper>
         </div>
       </body>
     </html>

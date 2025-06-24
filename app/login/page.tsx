@@ -1,18 +1,64 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { Button } from "@/components/tremor/Button";
 import { Input } from "@/components/tremor/Input";
-import { useState } from "react";
+import { getPayloadFromToken } from "@/service/jwt";
+import { login } from "@/service/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) return; // Tidak ada token, biarkan user login
+
+    try {
+      const payload = getPayloadFromToken(token);
+      // Jika token expired, hapus token
+      if (!payload.exp || payload.exp < Date.now() / 1000) {
+        localStorage.removeItem("access_token");
+        document.cookie =
+          "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        return;
+      }
+      // Jika token valid, redirect ke dashboard
+      router.push("/dashboard");
+    } catch (e) {
+      // Jika token tidak valid, hapus token
+      localStorage.removeItem("access_token");
+      document.cookie =
+        "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    }
+  }, [router]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", form);
+    setError("");
+    setLoading(true);
+    // Tampilkan loading toast
+    const toastId = toast.loading("Logging in...");
+
+    try {
+      await login(form.email, form.password);
+      toast.success("Login berhasil!", { id: toastId });
+      // Delay untuk menampilkan toast sukses
+      router.push("/dashboard");
+    } catch (err) {
+      toast.error("Login gagal. Periksa email dan password.", { id: toastId });
+      setError("Login gagal. Periksa email dan password.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,8 +100,12 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Button onClick={handleSubmit} className="w-full text-lg">
-            Login
+          <Button
+            disabled={loading}
+            onClick={handleLogin}
+            className="w-full text-lg"
+          >
+            {loading ? "Loading..." : "Login"}
           </Button>
         </form>
       </div>
