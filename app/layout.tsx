@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import NavbarWrapper from "@/components/NavbarWrapper";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,8 +24,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
-      <body className={poppins.className}>{children}</body>
+    <html lang="en">
+      <body className={poppins.className}>
+        <Toaster position="top-center" />
+        <div className="flex min-h-screen">
+          <NavbarWrapper />
+          <main className="flex-1 p-8">{children}</main>
+        </div>
+      </body>
     </html>
   );
 }
