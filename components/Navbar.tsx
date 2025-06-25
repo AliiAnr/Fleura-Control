@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
 
 export default function Navbar() {
   return (
-    <nav className="h-screen w-64 bg-[#F06AA8] text-white flex flex-col py-8 px-4">
+    <nav className="h-screen w-64 top-0 bg-[#F06AA8] sticky text-white flex flex-col py-8 px-4">
       <div className="mb-8 flex items-center space-x-4">
         <Image src="/images/icon.png" alt="logo" width={50} height={50} />
         <p className="text-[1.5rem]">Fleura</p>
