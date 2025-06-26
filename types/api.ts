@@ -36,6 +36,25 @@ export interface Store {
     sellerId: string;
 }
 
+export interface StoreAddress{
+  id: string;
+  postcode: string;
+  road: string;
+  province: string;
+  city: string;
+  detail: string;
+  district: string;
+  storeId: string;
+}
+
+
+export interface Seller {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  point: number;
+}
 export interface Category {
     id: string;
     name: string;

@@ -43,7 +43,7 @@ export default function StorePage() {
 
   return (
     <div>
-      <p className="text-2xl font-semibold mb-4">Product</p>
+      <p className="text-2xl font-semibold mb-4">Store</p>
       <Tabs defaultValue="tab1">
         <TabsList className="grid w-full grid-cols-2" variant="solid">
           <TabsTrigger value="tab1">New Store</TabsTrigger>
