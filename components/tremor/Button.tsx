@@ -31,6 +31,45 @@ const buttonVariants = tv({
         "disabled:bg-[#F187B7] disabled:text-white",
         "dark:disabled:bg-blue-800 dark:disabled:text-blue-400",
       ],
+      accepted: [
+        // border
+        "border-transparent",
+        // text color
+        "text-white dark:text-white",
+        // background color
+        "bg-[#8BC34A] dark:bg-blue-500",
+        // hover color
+        "hover:bg-[#609227] dark:hover:bg-blue-600",
+        // disabled
+        "disabled:bg-[#F187B7] disabled:text-white",
+        "dark:disabled:bg-blue-800 dark:disabled:text-blue-400",
+      ],
+      need_review: [
+        // border
+        "border-transparent",
+        // text color
+        "text-white dark:text-white",
+        // background color
+        "bg-[#FFC107] dark:bg-blue-500",
+        // hover color
+        "hover:bg-[#CEA21D] dark:hover:bg-blue-600",
+        // disabled
+        "disabled:bg-[#F187B7] disabled:text-white",
+        "dark:disabled:bg-blue-800 dark:disabled:text-blue-400",
+      ],
+      reject: [
+        // border
+        "border-transparent",
+        // text color
+        "text-white dark:text-white",
+        // background color
+        "bg-[#FF4646] dark:bg-blue-500",
+        // hover color
+        "hover:bg-[#DF4444] dark:hover:bg-blue-600",
+        // disabled
+        "disabled:bg-[#F187B7] disabled:text-white",
+        "dark:disabled:bg-blue-800 dark:disabled:text-blue-400",
+      ],
       secondary: [
         // border
         "border-gray-300 dark:border-gray-800",

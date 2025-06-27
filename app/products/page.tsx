@@ -74,6 +74,9 @@ export default function ProductsPage() {
                   <ItemRow
                     name={product.name}
                     image={product.picture?.[0]?.path || ""}
+                    onClick={() => {
+                      router.push(`/products/detail/${product.id}`);
+                    }}
                   />
                 </div>
               ))}
