@@ -9,8 +9,10 @@ import {
   TabsTrigger,
 } from "@/components/tremor/Tabs";
 import { ItemRow } from "@/components/ItemRow";
+import { useRouter } from "next/navigation";
 
 export default function StorePage() {
+  const router = useRouter();
   const [unverifStores, setUnverifStores] = useState<Store[]>([]);
   const [verifStore, setVerifStore] = useState<Store[]>([]);
 
@@ -57,6 +59,9 @@ export default function StorePage() {
                   <ItemRow
                     name={store.name}
                     image={store.logo || ""}
+                    onClick={() => {
+                      router.push(`/stores/detail/${store.id}`);
+                    }}
                   />
                 </div>
               ))}
@@ -69,6 +74,9 @@ export default function StorePage() {
                   <ItemRow
                     name={store.name}
                     image={store.logo || ""}
+                    onClick={() => {
+                      router.push(`/stores/detail/${store.id}`);
+                    }}
                   />
                 </div>
               ))}

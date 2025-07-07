@@ -10,6 +10,7 @@ import api from "@/service/api";
 import {
   AdminProductReview,
   AdminsStatus,
+  AdminStoreReview,
   APIResponse,
   Product,
   ProductReviewResponse,
@@ -25,11 +26,11 @@ import toast from "react-hot-toast";
 export default function ProductDetailPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [product, setProduct] = useState<Product>();
+
   const [store, setStore] = useState<Store>();
   const [storeAddress, setStoreAddress] = useState<StoreAddress>();
   const [seller, setSeller] = useState<Seller>();
-  const [productReview, setProductReview] = useState<AdminProductReview>();
+  const [storeReview, setStoreReview] = useState<AdminStoreReview>();
   const [descReview, setDescReview] = useState("");
   const [reviewStatus, setReviewStatus] = useState<AdminsStatus>(
     AdminsStatus.NEED_REVIEW
@@ -43,27 +44,29 @@ export default function ProductDetailPage() {
     try {
       const res = await api.get("/store/detail?storeId=" + id);
       //   console.log("Products:", res.data.data);
-      setProduct(res.data.data);
+      setStore(res.data.data);
       //   console.log("Products set:", products); // Log the first product to verify
       //   setProducts(data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching store:", error);
     }
   };
-  const fetchProductReview = async () => {
+
+  const fetchStoreReview = async () => {
     try {
-      console.log(id)
-      const res = await api.get("admin/review/product/" + id);
+      console.log(id);
+      const res = await api.get("admin/review/store/" + id);
       //   console.log("Products:", res.data.data);
-      setProductReview(res.data.data);
+      setStoreReview(res.data.data);
       //   console.log("Products set:", products); // Log the first product to verify
       //   setProducts(data);
-      console.log(res)
-      console.log(productReview);
+      console.log(res);
+      console.log(storeReview);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
+
   // const fetchStore = async () => {
   //   try {
   //     const res = await api.get("/store/detail/");
@@ -77,7 +80,7 @@ export default function ProductDetailPage() {
   // };
   const fetchSeller = async () => {
     try {
-      const res = await api.get("/seller/detail/" + product?.store?.sellerId);
+      const res = await api.get("/seller/detail/" + store?.sellerId);
       //   console.log("Products:", res.data.data);
       setSeller(res.data.data);
       //   console.log("Products set:", products); // Log the first product to verify
@@ -88,13 +91,13 @@ export default function ProductDetailPage() {
   };
   const fetchStoreAddress = async () => {
     try {
-      const res = await api.get("/store/address?storeId=" + product?.store?.id);
+      const res = await api.get("/store/address?storeId=" + store?.id);
       //   console.log("Products:", res.data.data);
       setStoreAddress(res.data.data);
       //   console.log("Products set:", products); // Log the first product to verify
       //   setProducts(data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching store address:", error);
     }
   };
 
@@ -104,13 +107,13 @@ export default function ProductDetailPage() {
     const toastId = toast.loading("Menyimpan...");
 
     try {
-      console.log("productId: "+ id)
-      console.log("description: "+ descReview)
-      console.log("status: "+ reviewStatus)
+      console.log("storeId: " + id);
+      console.log("description: " + descReview);
+      console.log("status: " + reviewStatus);
       const res = await api.post<APIResponse<ProductReviewResponse>>(
-        "admin/review/product",
+        "admin/review/store",
         {
-          productId: id,
+          storeId: id,
           description: descReview,
           status: reviewStatus,
         }
@@ -126,66 +129,64 @@ export default function ProductDetailPage() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchStore();
   }, [id]);
 
   useEffect(() => {
-    if (product?.store?.id) {
+    if (store?.id) {
       fetchStoreAddress();
       fetchSeller();
-      fetchProductReview();
+      fetchStoreReview();
     }
-  }, [product]);
+  }, [store]);
 
   return (
     <div>
-      <p className="text-xl font-light mb-4">Review Product</p>
+      <p className="text-xl font-light mb-4">Review Store</p>
       <Card className="flex p-6 space-x-6 w-9/12">
-        <div className="space-y-2">
-          <div className="mb-4">
+        <div className="w-1/2 space-y-2">
+          <div className="mb-4 flex justify-center">
             <Image
-              src={product?.picture?.[0]?.path || ""}
-              alt={product?.name || "Product Image"}
+              src={store?.logo || ""}
+              alt={store?.name || "Store Image"}
               width={350}
               height={350}
               unoptimized
-              className="rounded-xl"
+              className="rounded-xl w-full"
             />
           </div>
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Name:</p>
-            <p className="font-light">{product?.name}</p>
+            <p className="font-light">{store?.name}</p>
           </div>
           <div className="flex justify-between text-[0.9rem]">
-            <p className="">Price:</p>
-            <p className="font-light">{formatRupiah(product?.price || 0)}</p>
+            <p className="">Operational Day:</p>
+            <p className="font-light">{store?.operational_day}</p>
           </div>
           <div className="flex justify-between text-[0.9rem]">
-            <p className="">Stok:</p>
-            <p className="font-light">{product?.stock}</p>
+            <p className="">Operational Hour:</p>
+            <p className="font-light">{store?.operational_hour}</p>
           </div>
-          <div className="flex justify-between text-[0.9rem]">
-            <p className="">Arrange Time:</p>
-            <p className="font-light">{product?.arrange_time}</p>
-          </div>
-          <div className="text-[0.9rem]">
-            <p className="">Description:</p>
-            <p className="font-light text-gray-500">{product?.description}</p>
-          </div>
-        </div>
-        <div className=" space-y-2">
-          <p className="text-2xl font-medium">Seller Information</p>
-          <div className="flex justify-between text-[0.9rem]">
-            <p className="">Nama Toko:</p>
-            <p className="font-light">{product?.store?.name}</p>
-          </div>
-          <div className="text-[0.9rem]">
+          <div className="flex flex-col justify-between text-[0.9rem]">
             <p className="">Address:</p>
             <p className="font-light text-gray-500">{`${storeAddress?.road}, ${storeAddress?.detail}, ${storeAddress?.district}, ${storeAddress?.city}, ${storeAddress?.province}, ${storeAddress?.postcode}`}</p>
           </div>
+
+          <div className="text-[0.9rem]">
+            <p className="">Description:</p>
+            <p className="font-light text-gray-500">{store?.description}</p>
+          </div>
+        </div>
+        <div className="w-1/2 space-y-2">
+          <p className="text-2xl font-medium">Seller Information</p>
+          <div className="flex justify-between text-[0.9rem]">
+            <p className="">Name:</p>
+            <p className="font-light">{seller?.name}</p>
+          </div>
+          
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Phone:</p>
-            <p className="font-light">{product?.store?.phone}</p>
+            <p className="font-light">{seller?.phone}</p>
           </div>
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Email:</p>
@@ -195,7 +196,7 @@ export default function ProductDetailPage() {
             <p className="">Status:</p>
             <p className="font-light">
               {adminReviewStatusConv(
-                productReview?.status || AdminsStatus.NEED_REVIEW
+                storeReview?.status || AdminsStatus.NEED_REVIEW
               )}
             </p>
           </div>

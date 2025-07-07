@@ -8,10 +8,10 @@ export interface LoginResponse {
   access_token: string;
 }
 
-export interface ProductReviewResponse{
+export interface ProductReviewResponse {
   productId: string;
   description: string;
-  status: AdminsStatus
+  status: AdminsStatus;
 }
 
 export interface Product {
@@ -42,6 +42,48 @@ export interface Store {
   sellerId: string;
 }
 
+export enum TakenMethod {
+  PICKUP = "pickup",
+  DELIVERY = "delivery",
+}
+export enum OrderStatus {
+  CREATED = "created",
+  PROCESS = "process",
+  PICKUP = "pickup",
+  DELIVERY = "delivery",
+  COMPLETED = "completed",
+}
+
+export interface Order {
+  id: string;
+  note: string;
+  created_at: Date;
+  total: number;
+  point: number;
+  taken_date: Date;
+  taken_method: TakenMethod;
+  status: OrderStatus;
+  store?: Store;
+  buyer?: Buyer;
+  addressId?: string;
+  orderItems?: OrderItem[]
+}
+
+export interface OrderItem{
+  id: string;
+  quantity: number;
+  product: Product
+}
+
+export interface Buyer{
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  point: number;
+  verified_at: Date;
+}
+
 export interface StoreAddress {
   id: string;
   postcode: string;
@@ -51,6 +93,16 @@ export interface StoreAddress {
   detail: string;
   district: string;
   storeId: string;
+}
+export interface BuyerAddress {
+  id: string;
+  postcode: string;
+  road: string;
+  province: string;
+  city: string;
+  detail: string;
+  district: string;
+  buyerId: string;
 }
 
 export interface Seller {
@@ -70,12 +122,21 @@ export interface AdminProductReview {
   status: AdminsStatus;
   productId: string;
 }
+export interface AdminStoreReview {
+  id: string;
+  created_at: string;
+  description: string;
+  status: AdminsStatus;
+  productId: string;
+}
 
 export enum AdminsStatus {
   ACCEPTED = "ACCEPTED",
   NEED_REVIEW = "NEED_REVIEW",
   REJECTED = "REJECTED",
 }
+
+
 
 export interface Category {
   id: string;

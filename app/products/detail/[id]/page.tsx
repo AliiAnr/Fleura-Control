@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
     <div>
       <p className="text-xl font-light mb-4">Review Product</p>
       <Card className="flex p-6 space-x-6 w-9/12">
-        <div className="space-y-2">
+        <div className="space-y-2 w-1/2">
           <div className="mb-4">
             <Image
               src={product?.picture?.[0]?.path || ""}
@@ -149,7 +149,7 @@ export default function ProductDetailPage() {
               width={350}
               height={350}
               unoptimized
-              className="rounded-xl"
+              className="rounded-xl w-full"
             />
           </div>
           <div className="flex justify-between text-[0.9rem]">
@@ -173,7 +173,7 @@ export default function ProductDetailPage() {
             <p className="font-light text-gray-500">{product?.description}</p>
           </div>
         </div>
-        <div className=" space-y-2">
+        <div className=" space-y-2 w-1/2">
           <p className="text-2xl font-medium">Seller Information</p>
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Nama Toko:</p>
