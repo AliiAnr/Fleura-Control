@@ -3,8 +3,10 @@ import { ItemCard } from "@/components/ItemCard";
 import { useEffect, useState } from "react";
 import { Product, Store } from "@/types/api";
 import api from "@/service/api";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
 
@@ -48,6 +50,9 @@ export default function DashboardPage() {
               image={product.picture?.[0]?.path || ""}
               category={product.category?.name}
               price={product.price}
+              onClick={() => {
+                router.push(`/products/detail/${product.id}`);
+              }}
             />
           </div>
         ))}
@@ -56,10 +61,7 @@ export default function DashboardPage() {
       <div className="flex gap-6">
         {stores.slice(0, 5).map((store) => (
           <div key={store.id}>
-            <ItemCard
-              name={store.name}
-              image={store.logo || ""}
-            />
+            <ItemCard name={store.name} image={store.logo || ""} />
           </div>
         ))}
       </div>
