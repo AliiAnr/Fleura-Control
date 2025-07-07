@@ -58,7 +58,7 @@ export default function StorePage() {
                 <div key={store.id}>
                   <ItemRow
                     name={store.name}
-                    image={store.logo || ""}
+                    image={store.logo || "images/store_default.png"}
                     onClick={() => {
                       router.push(`/stores/detail/${store.id}`);
                     }}
@@ -73,7 +73,7 @@ export default function StorePage() {
                 <div key={store.id}>
                   <ItemRow
                     name={store.name}
-                    image={store.logo || ""}
+                    image={store.logo || "images/store_default.png"}
                     onClick={() => {
                       router.push(`/stores/detail/${store.id}`);
                     }}

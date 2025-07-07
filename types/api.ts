@@ -13,6 +13,9 @@ export interface ProductReviewResponse {
   description: string;
   status: AdminsStatus;
 }
+export interface UpdateOrderRequest {
+  status: OrderStatus;
+}
 
 export interface Product {
   id: string;
@@ -66,16 +69,41 @@ export interface Order {
   store?: Store;
   buyer?: Buyer;
   addressId?: string;
-  orderItems?: OrderItem[]
+  orderItems?: OrderItem[];
+  payment?: Payment;
 }
 
-export interface OrderItem{
+export interface OrderItem {
   id: string;
   quantity: number;
-  product: Product
+  product: Product;
 }
 
-export interface Buyer{
+export interface Payment {
+  id: string;
+  created_at: Date;
+  status: PaymentStatus;
+  methode: PaymentMethod;
+  success_at: Date;
+  orderId: string;
+  qris_url: string;
+  qris_expired_at: string;
+  
+}
+
+export enum PaymentMethod {
+  QRIS = "qris",
+  CASH = "cash",
+  POINT = "point",
+}
+
+export enum PaymentStatus {
+  EXPIRE = "expire",
+  UNPAID = "unpaid",
+  PAID = "paid",
+}
+
+export interface Buyer {
   id: string;
   name: string;
   email: string;
@@ -113,6 +141,7 @@ export interface Seller {
   identity_number: string;
   identity_picture: string;
   account: string;
+  picture: string;
 }
 
 export interface AdminProductReview {
@@ -135,8 +164,6 @@ export enum AdminsStatus {
   NEED_REVIEW = "NEED_REVIEW",
   REJECTED = "REJECTED",
 }
-
-
 
 export interface Category {
   id: string;

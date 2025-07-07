@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
         <div className="space-y-2 w-1/2">
           <div className="mb-4">
             <Image
-              src={product?.picture?.[0]?.path || ""}
+              src={product?.picture?.[0]?.path || "images/product_default.png"}
               alt={product?.name || "Product Image"}
               width={350}
               height={350}

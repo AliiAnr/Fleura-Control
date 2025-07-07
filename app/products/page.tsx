@@ -58,7 +58,7 @@ export default function ProductsPage() {
                 <div key={product.id}>
                   <ItemRow
                     name={product.name}
-                    image={product.picture?.[0]?.path || ""}
+                    image={product.picture?.[0]?.path || "images/product_default.png"}
                     onClick={() => {
                       router.push(`/products/detail/${product.id}`);
                     }}
@@ -73,7 +73,7 @@ export default function ProductsPage() {
                 <div key={product.id}>
                   <ItemRow
                     name={product.name}
-                    image={product.picture?.[0]?.path || ""}
+                    image={product.picture?.[0]?.path || "images/product_default.png"}
                     onClick={() => {
                       router.push(`/products/detail/${product.id}`);
                     }}

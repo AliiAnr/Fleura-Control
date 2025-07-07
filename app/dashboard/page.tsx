@@ -47,7 +47,7 @@ export default function DashboardPage() {
           <div key={product.id}>
             <ItemCard
               name={product.name}
-              image={product.picture?.[0]?.path || ""}
+              image={product.picture?.[0]?.path || "images/product_default.png"}
               category={product.category?.name}
               price={product.price}
               onClick={() => {
@@ -61,7 +61,13 @@ export default function DashboardPage() {
       <div className="flex gap-6">
         {stores.slice(0, 5).map((store) => (
           <div key={store.id}>
-            <ItemCard name={store.name} image={store.logo || ""} />
+            <ItemCard
+              name={store.name}
+              image={store.logo || "images/store_default.png"}
+              onClick={() => {
+                router.push(`/stores/detail/${store.id}`);
+              }}
+            />
           </div>
         ))}
       </div>

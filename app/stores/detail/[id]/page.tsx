@@ -147,7 +147,7 @@ export default function ProductDetailPage() {
         <div className="w-1/2 space-y-2">
           <div className="mb-4 flex justify-center">
             <Image
-              src={store?.logo || ""}
+              src={store?.logo || "images/store_default.png"}
               alt={store?.name || "Store Image"}
               width={350}
               height={350}

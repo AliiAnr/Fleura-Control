@@ -11,7 +11,7 @@ import {
 import { ItemRow } from "@/components/ItemRow";
 import { useRouter } from "next/navigation";
 
-export default function StorePage() {
+export default function SalesPage() {
   const router = useRouter();
   const [activeOrder, setActiveOrder] = useState<Order[]>([]);
   const [completedOrder, setCompletedOrder] = useState<Order[]>([]);
@@ -47,11 +47,11 @@ export default function StorePage() {
 
   return (
     <div>
-      <p className="text-2xl font-semibold mb-4">Store</p>
+      <p className="text-2xl font-semibold mb-4">Order</p>
       <Tabs defaultValue="tab1">
         <TabsList className="grid w-full grid-cols-2" variant="solid">
-          <TabsTrigger value="tab1">Active Order</TabsTrigger>
-          <TabsTrigger value="tab2">Completed Order</TabsTrigger>
+          <TabsTrigger value="tab1">Active</TabsTrigger>
+          <TabsTrigger value="tab2">Completed</TabsTrigger>
         </TabsList>
         <div className="mt-4">
           <TabsContent value="tab1">
@@ -59,9 +59,9 @@ export default function StorePage() {
               {activeOrder.map((order) => (
                 <div key={order.id}>
                   <ItemRow
-                    name={order.orderItems?.[0]?.product?.name || ""}
+                    name={order.orderItems?.[0]?.product?.name || order.id}
                     image={
-                      order.orderItems?.[0]?.product?.picture?.[0]?.path || ""
+                      order.orderItems?.[0]?.product?.picture?.[0]?.path || "images/order_default.png"
                     }
                     onClick={() => {
                       router.push(`/sales/detail/${order.id}`);
@@ -76,9 +76,9 @@ export default function StorePage() {
               {completedOrder.map((order) => (
                 <div key={order.id}>
                   <ItemRow
-                    name={order.orderItems?.[0]?.product?.name || ""}
+                    name={order.orderItems?.[0]?.product?.name || order.id}
                     image={
-                      order.orderItems?.[0]?.product?.picture?.[0]?.path || ""
+                      order.orderItems?.[0]?.product?.picture?.[0]?.path || "images/order_default.png"
                     }
                     onClick={() => {
                       router.push(`/sales/detail/${order.id}`);
