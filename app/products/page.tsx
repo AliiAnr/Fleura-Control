@@ -15,27 +15,29 @@ export default function ProductsPage() {
   const router = useRouter();
   const [unverifProducts, setUnverifProducts] = useState<Product[]>([]);
   const [verifProducts, setVerifProducts] = useState<Product[]>([]);
+  const [loadingUnverif, setLoadingUnverif] = useState(true);
+  const [loadingVerif, setLoadingVerif] = useState(true);
 
   const fetchUnverifiedProducts = async () => {
+    setLoadingUnverif(true);
     try {
       const res = await api.get("/product/unverified");
-      //   console.log("Products:", res.data.data);
       setUnverifProducts(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoadingUnverif(false);
     }
   };
   const fetchVerifiedProducts = async () => {
+    setLoadingVerif(true);
     try {
       const res = await api.get("/product/verified");
-      //   console.log("Products:", res.data.data);
       setVerifProducts(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoadingVerif(false);
     }
   };
   useEffect(() => {
@@ -54,32 +56,40 @@ export default function ProductsPage() {
         <div className="mt-4">
           <TabsContent value="tab1">
             <div className="space-y-2">
-              {unverifProducts.map((product) => (
-                <div key={product.id}>
-                  <ItemRow
-                    name={product.name}
-                    image={product.picture?.[0]?.path || "images/product_default.png"}
-                    onClick={() => {
-                      router.push(`/products/detail/${product.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingUnverif
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : unverifProducts.map((product) => (
+                    <div key={product.id}>
+                      <ItemRow
+                        name={product.name}
+                        image={product.picture?.[0]?.path || "images/product_default.png"}
+                        onClick={() => {
+                          router.push(`/products/detail/${product.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
           <TabsContent value="tab2">
             <div className="space-y-2">
-              {verifProducts.map((product) => (
-                <div key={product.id}>
-                  <ItemRow
-                    name={product.name}
-                    image={product.picture?.[0]?.path || "images/product_default.png"}
-                    onClick={() => {
-                      router.push(`/products/detail/${product.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingVerif
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : verifProducts.map((product) => (
+                    <div key={product.id}>
+                      <ItemRow
+                        name={product.name}
+                        image={product.picture?.[0]?.path || "images/product_default.png"}
+                        onClick={() => {
+                          router.push(`/products/detail/${product.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
         </div>

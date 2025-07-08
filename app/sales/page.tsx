@@ -16,29 +16,29 @@ export default function SalesPage() {
   const router = useRouter();
   const [activeOrder, setActiveOrder] = useState<Order[]>([]);
   const [completedOrder, setCompletedOrder] = useState<Order[]>([]);
+  const [loadingActive, setLoadingActive] = useState(true);
+  const [loadingCompleted, setLoadingCompleted] = useState(true);
 
   const fetchActiveOrders = async () => {
+    setLoadingActive(true);
     try {
       const res = await api.get("/order/active");
-      console.log("Products:", res.data.data);
       setActiveOrder(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      console.log(activeOrder);
+      setLoadingActive(false);
     }
   };
   const fetchCompletedOrders = async () => {
+    setLoadingCompleted(true);
     try {
       const res = await api.get("/order/completed");
-      //   console.log("Products:", res.data.data);
       setCompletedOrder(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoadingCompleted(false);
     }
   };
   useEffect(() => {
@@ -57,36 +57,46 @@ export default function SalesPage() {
         <div className="mt-4">
           <TabsContent value="tab1">
             <div className="space-y-2">
-              {activeOrder.map((order) => (
-                <div key={order.id}>
-                  <ItemRow
-                    name={order.orderItems?.[0]?.product?.name || order.id}
-                    image={
-                      order.orderItems?.[0]?.product?.picture?.[0]?.path || "images/order_default.png"
-                    }
-                    onClick={() => {
-                      router.push(`/sales/detail/${order.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingActive
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : activeOrder.map((order) => (
+                    <div key={order.id}>
+                      <ItemRow
+                        name={order.orderItems?.[0]?.product?.name || order.id}
+                        image={
+                          order.orderItems?.[0]?.product?.picture?.[0]?.path ||
+                          "images/order_default.png"
+                        }
+                        onClick={() => {
+                          router.push(`/sales/detail/${order.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
           <TabsContent value="tab2">
             <div className="space-y-2">
-              {completedOrder.map((order) => (
-                <div key={order.id}>
-                  <ItemRow
-                    name={order.orderItems?.[0]?.product?.name || order.id}
-                    image={
-                      order.orderItems?.[0]?.product?.picture?.[0]?.path || "images/order_default.png"
-                    }
-                    onClick={() => {
-                      router.push(`/sales/detail/${order.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingCompleted
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : completedOrder.map((order) => (
+                    <div key={order.id}>
+                      <ItemRow
+                        name={order.orderItems?.[0]?.product?.name || order.id}
+                        image={
+                          order.orderItems?.[0]?.product?.picture?.[0]?.path ||
+                          "images/order_default.png"
+                        }
+                        onClick={() => {
+                          router.push(`/sales/detail/${order.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
         </div>

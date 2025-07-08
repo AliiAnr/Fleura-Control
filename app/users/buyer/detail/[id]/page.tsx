@@ -31,17 +31,14 @@ import toast from "react-hot-toast";
 
 export default function UserDetailPage() {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [buyer, setBuyer] = useState<Buyer>();
   const [buyerAddress, setBuyerAddress] = useState<BuyerAddress[]>();
 
   const fetchBuyer = async () => {
     try {
       const res = await api.get("/buyer/detail/" + id);
-      //   console.log("Products:", res.data.data);
       setBuyer(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching buyer:", error);
     }
@@ -49,19 +46,34 @@ export default function UserDetailPage() {
   const fetchBuyerAddress = async () => {
     try {
       const res = await api.get("/buyer/address?userId=" + id);
-      //   console.log("Products:", res.data.data);
       setBuyerAddress(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching buyer address:", error);
     }
   };
 
   useEffect(() => {
-    fetchBuyer();
-    fetchBuyerAddress();
+    setLoading(true);
+    Promise.all([fetchBuyer(), fetchBuyerAddress()]).finally(() => setLoading(false));
   }, [id]);
+
+  if (loading) {
+    return (
+      <div>
+        <p className="text-xl font-light mb-4">Buyer</p>
+        <Card className="flex p-6 space-x-6 w-5/12 animate-pulse">
+          <div className="space-y-2 w-full">
+            <div className="mb-4 bg-[#F5CEE0] rounded-xl w-full h-[350px]" />
+            <div className="h-6 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/4 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>

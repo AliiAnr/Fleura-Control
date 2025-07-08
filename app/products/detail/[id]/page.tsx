@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 export default function ProductDetailPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const [product, setProduct] = useState<Product>();
   const [store, setStore] = useState<Store>();
   const [storeAddress, setStoreAddress] = useState<StoreAddress>();
@@ -42,46 +43,23 @@ export default function ProductDetailPage() {
   const fetchProducts = async () => {
     try {
       const res = await api.get("/product/detail/" + id);
-      //   console.log("Products:", res.data.data);
       setProduct(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
   const fetchProductReview = async () => {
     try {
-      console.log(id)
       const res = await api.get("admin/review/product/" + id);
-      //   console.log("Products:", res.data.data);
       setProductReview(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
-      console.log(res)
-      console.log(productReview);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
-  // const fetchStore = async () => {
-  //   try {
-  //     const res = await api.get("/store/detail/");
-  //     //   console.log("Products:", res.data.data);
-  //     setProduct(res.data.data);
-  //     //   console.log("Products set:", products); // Log the first product to verify
-  //     //   setProducts(data);
-  //   } catch (error) {
-  //     console.error("Error fetching products:", error);
-  //   }
-  // };
   const fetchSeller = async () => {
     try {
       const res = await api.get("/seller/detail/" + product?.store?.sellerId);
-      //   console.log("Products:", res.data.data);
       setSeller(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching seller:", error);
     }
@@ -89,10 +67,7 @@ export default function ProductDetailPage() {
   const fetchStoreAddress = async () => {
     try {
       const res = await api.get("/store/address?storeId=" + product?.store?.id);
-      //   console.log("Products:", res.data.data);
       setStoreAddress(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -100,13 +75,8 @@ export default function ProductDetailPage() {
 
   const handleReview = async () => {
     setLoading(true);
-    // Tampilkan loading toast
     const toastId = toast.loading("Menyimpan...");
-
     try {
-      console.log("productId: "+ id)
-      console.log("description: "+ descReview)
-      console.log("status: "+ reviewStatus)
       const res = await api.post<APIResponse<ProductReviewResponse>>(
         "admin/review/product",
         {
@@ -118,7 +88,6 @@ export default function ProductDetailPage() {
       toast.success("Berhasil Menyimpan!", { id: toastId });
     } catch (err) {
       toast.error("Gagal Menyimpan.", { id: toastId });
-
       console.error(err);
     } finally {
       setLoading(false);
@@ -126,16 +95,49 @@ export default function ProductDetailPage() {
   };
 
   useEffect(() => {
+    setLoadingPage(true);
     fetchProducts();
   }, [id]);
 
   useEffect(() => {
     if (product?.store?.id) {
-      fetchStoreAddress();
-      fetchSeller();
-      fetchProductReview();
+      Promise.all([
+        fetchStoreAddress(),
+        fetchSeller(),
+        fetchProductReview(),
+      ]).finally(() => {
+        setLoadingPage(false);
+      });
     }
   }, [product]);
+
+  if (loadingPage) {
+    return (
+      <div>
+        <p className="text-xl font-light mb-4">Order Detail</p>
+        <Card className="flex p-6 space-x-6 w-9/12 animate-pulse">
+          <div className="space-y-2 w-1/2">
+            <div className="mb-4 bg-[#F5CEE0] rounded-xl w-full h-[350px]" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/4 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+          <div className="space-y-2 w-1/2">
+            <div className="h-6 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-2/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+            <div className="h-10 bg-[#F5CEE0] rounded w-full mb-2" />
+            <div className="h-10 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>

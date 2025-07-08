@@ -32,7 +32,7 @@ import toast from "react-hot-toast";
 
 export default function SellerDetailPage() {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [seller, setSeller] = useState<Seller>();
   const [sellerAddress, setSellerAddress] = useState<SellerAddress[]>();
   const [sellerReview, setSellerReview] = useState<AdminProductReview>();
@@ -46,9 +46,7 @@ export default function SellerDetailPage() {
   }
   const handleReview = async () => {
     setLoading(true);
-    // Tampilkan loading toast
     const toastId = toast.loading("Menyimpan...");
-
     try {
       const res = await api.post<APIResponse<ProductReviewResponse>>(
         "admin/review/seller",
@@ -61,7 +59,6 @@ export default function SellerDetailPage() {
       toast.success("Berhasil Menyimpan!", { id: toastId });
     } catch (err) {
       toast.error("Gagal Menyimpan.", { id: toastId });
-
       console.error(err);
     } finally {
       setLoading(false);
@@ -70,11 +67,7 @@ export default function SellerDetailPage() {
   const fetchSeller = async () => {
     try {
       const res = await api.get("/seller/detail/" + id);
-      //   console.log("Products:", res.data.data);
       setSeller(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
-      console.log("data seller : "+res.data.data)
     } catch (error) {
       console.error("Error fetching seller:", error);
     }
@@ -82,51 +75,62 @@ export default function SellerDetailPage() {
   const fetchSellerAddress = async () => {
     try {
       const res = await api.get("/seller/address?userId=" + id);
-      //   console.log("Products:", res.data.data);
       setSellerAddress(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
-
     } catch (error) {
       console.error("Error fetching buyer address:", error);
     }
   };
   const fetchSellerReview = async () => {
     try {
-      console.log(id);
       const res = await api.get("admin/review/seller/" + id);
-      //   console.log("Products:", res.data.data);
       setSellerReview(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
-      console.log(res);
-      console.log(sellerReview);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
 
   useEffect(() => {
-    fetchSeller();
-    fetchSellerAddress();
-    
+    setLoading(true);
+    Promise.all([fetchSeller(), fetchSellerAddress()]).finally(() => setLoading(false));
   }, [id]);
 
   useEffect(() => {
     if (seller?.id) {
-      console.log("data seller "+seller)
       fetchSellerReview();
     }
   }, [seller]);
+
+  if (loading) {
+    return (
+      <div>
+        <p className="text-xl font-light mb-4">Seller</p>
+        <Card className="flex p-6 space-x-6 w-9/12 animate-pulse">
+          <div className="space-y-2 w-1/2">
+            <div className="mb-4 bg-[#F5CEE0] rounded-xl w-full h-[350px]" />
+            <div className="h-6 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/4 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+          <div className="space-y-2 w-1/2">
+            <div className="mb-4 bg-[#F5CEE0] rounded-xl w-full h-[350px]" />
+            <div className="h-6 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/4 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>
       <p className="text-xl font-light mb-4">Seller</p>
       <Card className="flex p-6 space-x-6 w-9/12">
         <div className="space-y-2 w-1/2">
-          {/* <div className="flex justify-between text-[0.9rem]">
-            <p className="text-2xl font-medium">Seller Information</p>
-          </div> */}
           <div className="mb-4">
             <Image
               src={seller?.picture || "images/user_default.png"}
@@ -141,7 +145,6 @@ export default function SellerDetailPage() {
               }}
             />
           </div>
-
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Name:</p>
             <p className="font-light">{seller?.name}</p>
@@ -174,7 +177,6 @@ export default function SellerDetailPage() {
               }}
             />
           </div>
-
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Identity Number:</p>
             <p className="font-light">{seller?.identity_number}</p>

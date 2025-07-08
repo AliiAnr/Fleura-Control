@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 export default function OrderDetailPage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const [order, setOrder] = useState<Order>();
   const [orderStatus, setOrderStatus] = useState<OrderStatus>(
     OrderStatus.CREATED
@@ -42,14 +43,19 @@ export default function OrderDetailPage() {
   const fetchOrder = async () => {
     try {
       const res = await api.get("/order/detail/" + id);
-      //   console.log("Products:", res.data.data);
       setOrder(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      setLoadingPage(false);
     }
   };
+
+  useEffect(() => {
+    setLoadingPage(true);
+    fetchOrder();
+  }, [id]);
+
   useEffect(() => {
     if (order?.status) {
       setOrderStatus(order.status);
@@ -58,9 +64,7 @@ export default function OrderDetailPage() {
 
   const handleReview = async () => {
     setLoading(true);
-    // Tampilkan loading toast
     const toastId = toast.loading("Menyimpan...");
-
     try {
       const res = await api.put<APIResponse<ProductReviewResponse>>(
         "order/status/" + id,
@@ -71,16 +75,39 @@ export default function OrderDetailPage() {
       toast.success("Berhasil Menyimpan!", { id: toastId });
     } catch (err) {
       toast.error("Gagal Menyimpan.", { id: toastId });
-
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchOrder();
-  }, [id]);
+  if (loadingPage) {
+    return (
+      <div>
+        <p className="text-xl font-light mb-4">Review Product</p>
+        <Card className="flex p-6 space-x-6 w-9/12 animate-pulse">
+          <div className="space-y-2 w-1/2">
+            <div className="mb-4 bg-[#F5CEE0] rounded-xl w-full h-[350px]" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/4 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+          <div className="space-y-2 w-1/2">
+            <div className="h-6 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-2/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/3 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-1/2 mb-2" />
+            <div className="h-5 bg-[#F5CEE0] rounded w-full mb-2" />
+            <div className="h-10 bg-[#F5CEE0] rounded w-full mb-2" />
+            <div className="h-10 bg-[#F5CEE0] rounded w-full mb-2" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>

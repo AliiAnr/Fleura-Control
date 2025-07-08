@@ -15,27 +15,29 @@ export default function UserPage() {
   const router = useRouter();
   const [buyers, setBuyers] = useState<Buyer[]>([]);
   const [sellers, setSellers] = useState<Seller[]>([]);
+  const [loadingBuyers, setLoadingBuyers] = useState(true);
+  const [loadingSellers, setLoadingSellers] = useState(true);
 
   const fetchBuyers = async () => {
+    setLoadingBuyers(true);
     try {
       const res = await api.get("/buyer");
-      //   console.log("Products:", res.data.data);
       setBuyers(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching buyers:", error);
+    } finally {
+      setLoadingBuyers(false);
     }
   };
   const fetchSellers = async () => {
+    setLoadingSellers(true);
     try {
       const res = await api.get("/seller");
-      //   console.log("Products:", res.data.data);
       setSellers(res.data.data);
-      //   console.log("Products set:", products); // Log the first product to verify
-      //   setProducts(data);
     } catch (error) {
       console.error("Error fetching sellers:", error);
+    } finally {
+      setLoadingSellers(false);
     }
   };
   useEffect(() => {
@@ -54,32 +56,40 @@ export default function UserPage() {
         <div className="mt-4">
           <TabsContent value="tab1">
             <div className="space-y-2">
-              {buyers.map((buyer) => (
-                <div key={buyer.id}>
-                  <ItemRow
-                    name={buyer.name || buyer.email}
-                    image={"images/user_default.png"}
-                    onClick={() => {
-                      router.push(`/users/buyer/detail/${buyer.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingBuyers
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : buyers.map((buyer) => (
+                    <div key={buyer.id}>
+                      <ItemRow
+                        name={buyer.name || buyer.email}
+                        image={"images/user_default.png"}
+                        onClick={() => {
+                          router.push(`/users/buyer/detail/${buyer.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
           <TabsContent value="tab2">
             <div className="space-y-2">
-              {sellers.map((seller) => (
-                <div key={seller.id}>
-                  <ItemRow
-                    name={seller.name || seller.email}
-                    image={seller.picture || "images/user_default.png"}
-                    onClick={() => {
-                      router.push(`/users/seller/detail/${seller.id}`);
-                    }}
-                  />
-                </div>
-              ))}
+              {loadingSellers
+                ? Array.from({ length: 5 }).map((_, idx) => (
+                    <ItemRow key={idx} isLoading name="" image="" />
+                  ))
+                : sellers.map((seller) => (
+                    <div key={seller.id}>
+                      <ItemRow
+                        name={seller.name || seller.email}
+                        image={seller.picture || "images/user_default.png"}
+                        onClick={() => {
+                          router.push(`/users/seller/detail/${seller.id}`);
+                        }}
+                      />
+                    </div>
+                  ))}
             </div>
           </TabsContent>
         </div>

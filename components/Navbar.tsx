@@ -2,7 +2,8 @@ import Link from "next/link";
 
 import Image from "next/image"; // Assuming you have an Image component for the logo
 // import { Input } from "./tremor/Input";
-import { usePathname } from "next/navigation"; // ⬅️ Import hook ini
+import { usePathname, useRouter } from "next/navigation"; // ⬅️ Import hook ini
+import { logout } from "@/service/useAuth";
 
 type NavItem = {
   label: string;
@@ -20,8 +21,18 @@ const navItems: NavItem[] = [
 
 export default function Navbar() {
   const pathname = usePathname(); // ⬅️ Ambil path saat ini
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      router.push("login");
+    }
+  };
   return (
-    <nav className="h-screen w-64 top-0 bg-[#F06AA8] sticky text-white flex flex-col py-8 px-4">
+    <nav className="h-screen w-64 top-0 bg-[#F06AA8] sticky text-white flex flex-col justify-between py-8 px-4">
       <div className="mb-8 flex items-center space-x-4">
         <Image src="/images/icon.png" alt="logo" width={50} height={50} />
         <p className="text-[1.5rem]">Fleura</p>
@@ -54,6 +65,13 @@ export default function Navbar() {
           );
         })}
       </ul>
+
+      <button
+        className="flex items-center gap-3 py-2 px-4 rounded transition hover:bg-[#A2014B]"
+        onClick={handleLogout}
+      >
+        <p>Keluar</p>
+      </button>
     </nav>
   );
 }
