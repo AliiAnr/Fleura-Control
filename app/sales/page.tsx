@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Order } from "@/types/api";
 import { useEffect, useState } from "react";

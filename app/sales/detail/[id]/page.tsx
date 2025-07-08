@@ -98,20 +98,24 @@ export default function OrderDetailPage() {
               height={350}
               unoptimized
               className="rounded-xl w-full"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/images/product_default.png";
+              }}
             />
           </div>
           <div className="flex justify-between text-[0.9rem]">
-            <p className="">Order Summary:</p>
+            <p className="text-medium txe">Order Summary:</p>
           </div>
           <div>
             {order?.orderItems?.map((product) => (
-              <div className="flex justify-between" key={product.id}>
+              <div className="flex justify-between text-sm" key={product.id}>
                 <div className="flex gap-2">
-                  <p>{product.quantity}x</p>
+                  <p className="font-semibold">{product.quantity}x</p>
                   <p>{product.product.name}</p>
                 </div>
                 <div>
-                  <p>Rp. {product.product.price * product.quantity}</p>
+                  <p className="font-semibold">Rp {product.product.price * product.quantity}</p>
                 </div>
               </div>
             ))}
@@ -122,7 +126,7 @@ export default function OrderDetailPage() {
         <div className=" space-y-2 w-1/2">
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Total:</p>
-            <p className="font-light">Rp. {order?.total}</p>
+            <p className="font-medium text-[#F06AA8] ">Rp {order?.total}</p>
           </div>
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Payment Status:</p>
@@ -140,7 +144,7 @@ export default function OrderDetailPage() {
             <div className="text-[0.9rem]">
               <p className="">Delivery Date:</p>
               <p className="font-light">
-                {formatTanggalIndoFromDate(order.taken_date)}
+                {formatTanggalIndoFromDate(new Date(order.taken_date))}
               </p>
             </div>
           )}

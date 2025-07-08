@@ -13,6 +13,11 @@ export interface ProductReviewResponse {
   description: string;
   status: AdminsStatus;
 }
+export interface SellerReviewRequest {
+  sellerId: string;
+  description: string;
+  status: AdminsStatus;
+}
 export interface UpdateOrderRequest {
   status: OrderStatus;
 }
@@ -123,6 +128,16 @@ export interface StoreAddress {
   storeId: string;
 }
 export interface BuyerAddress {
+  id: string;
+  postcode: string;
+  road: string;
+  province: string;
+  city: string;
+  detail: string;
+  district: string;
+  buyerId: string;
+}
+export interface SellerAddress {
   id: string;
   postcode: string;
   road: string;

@@ -147,12 +147,16 @@ export default function ProductDetailPage() {
         <div className="w-1/2 space-y-2">
           <div className="mb-4 flex justify-center">
             <Image
-              src={store?.logo || "images/store_default.png"}
+              src={store?.logo || "/images/store_default.png"}
               alt={store?.name || "Store Image"}
               width={350}
               height={350}
               unoptimized
               className="rounded-xl w-full"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/images/store_default.png";
+              }}
             />
           </div>
           <div className="flex justify-between text-[0.9rem]">
@@ -183,7 +187,7 @@ export default function ProductDetailPage() {
             <p className="">Name:</p>
             <p className="font-light">{seller?.name}</p>
           </div>
-          
+
           <div className="flex justify-between text-[0.9rem]">
             <p className="">Phone:</p>
             <p className="font-light">{seller?.phone}</p>

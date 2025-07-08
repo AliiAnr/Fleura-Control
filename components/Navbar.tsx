@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ReactNode } from "react";
+
 import Image from "next/image"; // Assuming you have an Image component for the logo
 // import { Input } from "./tremor/Input";
 import { usePathname } from "next/navigation"; // ⬅️ Import hook ini
@@ -7,15 +7,15 @@ import { usePathname } from "next/navigation"; // ⬅️ Import hook ini
 type NavItem = {
   label: string;
   href: string;
-  icon?: ReactNode;
+  icon: string;
 };
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Product", href: "/products" },
-  { label: "Store", href: "/stores" },
-  { label: "Sale", href: "/sales" },
-  { label: "User", href: "/users" },
+  { label: "Dashboard", href: "/dashboard", icon: "/images/nav/dashboard.svg" },
+  { label: "Product", href: "/products", icon: "/images/nav/product.svg" },
+  { label: "Store", href: "/stores", icon: "/images/nav/store.svg" },
+  { label: "Sale", href: "/sales", icon: "/images/nav/sale.svg" },
+  { label: "User", href: "/users", icon: "/images/nav/user.svg" },
 ];
 
 export default function Navbar() {
@@ -37,13 +37,17 @@ export default function Navbar() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`block py-2 px-4 rounded transition ${
+                className={`flex items-center gap-3 py-2 px-4 rounded transition ${
                   isActive ? "bg-[#A2014B]" : "hover:bg-[#A2014B]"
                 }`}
               >
-                {item.icon && (
-                  <span className="mr-2 text-[1.75rem]">{item.icon}</span>
-                )}
+                <Image
+                  src={item.icon}
+                  alt={item.label + " icon"}
+                  width={24}
+                  height={24}
+                  className="mr-2"
+                />
                 {item.label}
               </Link>
             </li>

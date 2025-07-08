@@ -60,7 +60,7 @@ export default function UserPage() {
                     name={buyer.name || buyer.email}
                     image={"images/user_default.png"}
                     onClick={() => {
-                      router.push(`/users/detail/${buyer.id}`);
+                      router.push(`/users/buyer/detail/${buyer.id}`);
                     }}
                   />
                 </div>
@@ -75,7 +75,7 @@ export default function UserPage() {
                     name={seller.name || seller.email}
                     image={seller.picture || "images/user_default.png"}
                     onClick={() => {
-                      router.push(`/users/detail/${seller.id}`);
+                      router.push(`/users/seller/detail/${seller.id}`);
                     }}
                   />
                 </div>
