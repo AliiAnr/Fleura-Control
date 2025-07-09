@@ -75,7 +75,7 @@ export interface Order {
   buyer?: Buyer;
   addressId?: string;
   orderItems?: OrderItem[];
-  payment?: Payment;
+  payment: Payment;
 }
 
 export interface OrderItem {
