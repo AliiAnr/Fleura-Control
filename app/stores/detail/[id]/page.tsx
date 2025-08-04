@@ -55,7 +55,7 @@ export default function ProductDetailPage() {
       const res = await api.get("admin/review/store/" + id);
       setStoreReview(res.data.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching reviews:", error);
     }
   };
 
@@ -220,6 +220,7 @@ export default function ProductDetailPage() {
               {" "}
               Accept{" "}
             </Button>
+
             <Button
               variant="need_review"
               className="w-full"
